@@ -1,6 +1,7 @@
 package com.hmdp.config;
 
 import com.hmdp.utils.LoginInterceptor;
+import com.hmdp.utils.RefreshTokenInterceptor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -12,11 +13,13 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class SpringMvcConfig implements WebMvcConfigurer {
     @Autowired
-    private StringRedisTemplate stringRedisTemplate;
+    private LoginInterceptor loginInterceptor;
+    @Autowired
+    private RefreshTokenInterceptor refreshTokenInterceptor;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new LoginInterceptor(stringRedisTemplate))
+        registry.addInterceptor(loginInterceptor)
                 .excludePathPatterns(
                         "/user/login",
                         "/user/code",
@@ -25,6 +28,7 @@ public class SpringMvcConfig implements WebMvcConfigurer {
                         "/shop-type/**",
                         "/upload/**",
                         "/voucher/**"
-                );
+                ).order(1);
+        registry.addInterceptor(refreshTokenInterceptor).order(0);
     }
 }
