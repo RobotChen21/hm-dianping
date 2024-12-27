@@ -67,12 +67,5 @@ public class ShopServiceImpl extends ServiceImpl<ShopMapper, Shop> implements IS
         return Result.ok();
     }
 
-    private boolean tryLock(String key){
-        return Boolean.TRUE.equals(stringRedisTemplate.opsForValue().setIfAbsent(key, "1", 10, TimeUnit.SECONDS));
-    }
-    private void releaseLock(String key) {
-        stringRedisTemplate.delete(key);
-    }
-    //解决缓存击穿问题
 
 }

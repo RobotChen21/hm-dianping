@@ -28,6 +28,7 @@ public class RefreshTokenInterceptor implements HandlerInterceptor {
         if (StrUtil.isBlank(token)){
             return true;
         }
+        log.info(LOGIN_USER_KEY + token);
         Map<Object, Object> userEntries = stringRedisTemplate.opsForHash().entries(LOGIN_USER_KEY + token);
         if(userEntries.isEmpty()){
             return true;
